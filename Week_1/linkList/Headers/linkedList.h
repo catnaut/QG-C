@@ -48,6 +48,16 @@ typedef enum Status {
 **************************************************************/
 
 /**
+ *  @name        : LinkedList CreatLNode(ElemType data);
+ *	@description : initialize an LNode 
+ *	@param		 : None
+ *	@return		 : LNode*
+ *  @notice      : if no free space return NULL
+ */
+LinkedList CreatLNode();
+
+
+/**
  *  @name        : Status InitList(LinkList *L);
  *	@description : initialize an empty linked list with only the head node without value
  *	@param		 : L(the head node)
@@ -123,10 +133,10 @@ Status IsLoopList(LinkedList L);
  *  @name        : LNode* ReverseEvenList(LinkedList *L)
  *	@description : reverse the nodes which value is an even number in the linked list, input: 1 -> 2 -> 3 -> 4  output: 2 -> 1 -> 4 -> 3
  *	@param		 : L(the head node)
- *	@return		 : LNode(the new head node)
+ *	@return		 : status
  *  @notice      : choose to finish
  */
-LNode* ReverseEvenList(LinkedList *L);
+Status ReverseEvenList(LinkedList *L);
 
 /**
  *  @name        : LNode* FindMidNode(LinkedList *L)
@@ -137,7 +147,16 @@ LNode* ReverseEvenList(LinkedList *L);
  */
 LNode* FindMidNode(LinkedList *L);
 
+
+
+
+LNode* FindEnd(LNode *p);
+
+
  /**************************************************************
 *	End-Multi-Include-Prevent Section
 **************************************************************/
 #endif
+
+
+

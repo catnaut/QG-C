@@ -29,9 +29,22 @@ Status InitList(LinkedList *L)
     }
 }
 
-void DestroyList(LinkedList *L)
-{
 
+Status PrintList(LinkedList *L){
+    LNode* p = (*L)->next;
+    if(p==NULL) return ERROR;
+    printf("Print LinkedList:\n");
+    while (p!=NULL)
+    {
+        printf("%d\n",p->data);
+        p = p->next;
+    }
+    return SUCCESS;
+}
+
+
+void DestroyList(LinkedList *L){
+    
     // p1存储本节点的地址，p2存储下一个节点的地址
     LNode *p1 = (*L)->next;
     LNode *p2;
@@ -79,8 +92,8 @@ Status DeleteList(LNode *p, ElemType *e)
     return ERROR;
 }
 
-Status ReverseEvenList(LinkedList *L)
-{
+
+Status ReverseEvenList(LinkedList *L){
     // 必须有前两个节点和一个头节点
     LNode *pre = *L;
     if (pre == NULL && pre->next == NULL && pre->next->next == NULL)

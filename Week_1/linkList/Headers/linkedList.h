@@ -147,11 +147,16 @@ Status ReverseEvenList(LinkedList *L);
  */
 LNode* FindMidNode(LinkedList *L);
 
-
-
-
-LNode* FindEnd(LNode *p);
-
+// 稍后补注释
+// 没有任何元素 返回 ERROR 否则打印并返回 SUCCESS
+/**
+ *  @name        : Status PrintList(LinkedList *L);
+ *	@description : 打印单向链表,当链表为空返回 Error
+ *	@param		 : L(the head node)
+ *	@return		 : Status 
+ *  @notice      : 不要打印成环的链表
+ */
+Status PrintList(LinkedList *L);
 
  /**************************************************************
 *	End-Multi-Include-Prevent Section

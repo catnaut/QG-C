@@ -52,7 +52,7 @@ Status checkProtiy(LinkStack *s, char ch)
     {
         // 此时理论不会有问题
         getTopLStack(s, &num1);
-        return (getProtiy(num1)>getProtiy(ch));
+        return (getProtiy(num1) > getProtiy(ch));
     }
 }
 
@@ -114,9 +114,7 @@ Status calulator(char const *inputStr)
     initLStack(&numStack);
     initLStack(&opStack);
     char numBuf[numBufSize];
-    // int hasLeft = 0;
     char op;
-    // int status;
 
     while (*p != '\0')
     {
@@ -137,41 +135,37 @@ Status calulator(char const *inputStr)
         {
             p++;
         }
+        else if (*p == '(')
+        {
+            while (popLStack(&opStack, &op) && op != '(')
+            {
+                cal(&numStack, op);
+            }
+            // 这里需要检测 如果没有 （ 怎么办
+        }
+        else if (*p == '(')
+        {
+            // 我不清楚是是否需要保留这个
+            // hasLeft =1;
+            pushLStack(&opStack, *p);
+        }
         else if (isOperator(*p))
         {
-            if (*p == ')')
+            if (checkProtiy(&opStack, *p))
             {
-                while (popLStack(&opStack, &op) && op != '(')
-                {
-                    cal(&numStack, op);
-                }
-                // 这里需要检测 如果没有 （ 怎么办
-            }
-            else if (*p == '(')
-            {
-                // 我不清楚是是否需要保留这个
-                // hasLeft =1;
                 pushLStack(&opStack, *p);
+                p++;
             }
             else
             {
-                // 不能无脑压需要比较优先级
-                if (checkProtiy(&opStack, *p))
+                // 可以出栈 继续循环
+                while (!checkProtiy(&opStack, *p) && popLStack(&opStack, &op))
                 {
-                    pushLStack(&opStack, *p);
-                    p++;
+                    cal(&numStack, op);
                 }
-                else
-                {
-                    // 可以出栈 继续循环
-                    while (!checkProtiy(&opStack, *p) && popLStack(&opStack, &op))
-                    {
-                        cal(&numStack, op);
-                    }
-                    // 此时优先级大于进行压栈
-                    pushLStack(&opStack, *p);
-                    p++;
-                }
+                // 此时优先级大于进行压栈
+                pushLStack(&opStack, *p);
+                p++;
             }
         }
         else
@@ -179,7 +173,7 @@ Status calulator(char const *inputStr)
             return ERROR;
         }
     }
-    // 全部结束开始出栈
+    // 字符串遍历结束开始出栈
     while (popLStack(&opStack, &op))
     {
         cal(&numStack, op);

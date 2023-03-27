@@ -113,7 +113,7 @@ Status pushLStack(LinkStack *s,ElemType data){
 
 //出栈
 Status popLStack(LinkStack *s,ElemType *data){
-	if(isEmptyLStack(s)&&s->count<1){
+	if(isEmptyLStack(s)||s->count<1){
         // 栈为空或者不合法
         return ERROR;
     }

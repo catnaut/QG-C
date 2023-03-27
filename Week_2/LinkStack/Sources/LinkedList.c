@@ -77,7 +77,7 @@ Status DeleteList(LNode *p, ElemType *e)
         return ERROR;
     LNode* next = p->next;
     p->next = next->next;
-    e = next->data;
+    *e = next->data;
     free(next);
     return SUCCESS;
     // LNode *pre = p;

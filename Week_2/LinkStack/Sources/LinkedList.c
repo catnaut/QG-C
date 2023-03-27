@@ -20,11 +20,13 @@ LNode *CreatLNode()
 
 Status InitList(LinkedList *L)
 {
-    *L = CreatLNode();
-    if (*L == NULL)
+    LinkedList List;
+    List = (LinkedList)CreatLNode();
+    if (List == NULL)
         return ERROR;
     else
     {
+        *L = List;
         return SUCCESS;
     }
 }
@@ -71,24 +73,40 @@ Status InsertList(LNode *p, LNode *q)
 
 Status DeleteList(LNode *p, ElemType *e)
 {
-    if (p == NULL)
+    if (p == NULL||p->next == NULL)
         return ERROR;
-    LNode *pre = p;
-    LNode *q = p->next;
-    while (q != NULL)
-    {
+    LNode* next = p->next;
+    p->next = next->next;
+    e = next->data;
+    free(next);
+    return SUCCESS;
+    // LNode *pre = p;
+    // LNode *q = p->next;
+    // if (q->data == *e)
+    //     {
 
-        if (q->data == *e)
-        {
+    //         pre->next = q->next;
+    //         free(q);
+    //         // p->next = q;
+    //         return SUCCESS;
+    //     }
+    //     pre = pre->next;
+    //     q = q->next;
 
-            pre->next = q->next;
-            free(q);
-            // p->next = q;
-            return SUCCESS;
-        }
-        pre = pre->next;
-        q = q->next;
-    }
+    // while (q != NULL)
+    // {
+
+    //     if (q->data == *e)
+    //     {
+
+    //         pre->next = q->next;
+    //         free(q);
+    //         // p->next = q;
+    //         return SUCCESS;
+    //     }
+    //     pre = pre->next;
+    //     q = q->next;
+    // }
     return ERROR;
 }
 

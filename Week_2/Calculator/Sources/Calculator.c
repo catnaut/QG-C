@@ -1,6 +1,7 @@
 #include "Calculator.h"
 #include "LinkStack.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include <string.h>
 #define numBufSize 10
@@ -20,7 +21,7 @@ int getProtiy(char ch)
     switch (ch)
     {
     case '(':
-        return 0;
+        return 3;
         break;
     // case ')':
     //     return 0;
@@ -83,14 +84,14 @@ Status cal(LinkStack *s, char op)
             break;
         default:
             // error
-            assert(1);
+            assert(0);
             break;
         }
     }
     else
     {
         // error
-        assert(1);
+        assert(0);
     }
 }
 
@@ -120,7 +121,7 @@ Status calulator(char const *inputStr)
     {
         if (isNum(*p))
         {
-            strcpy(numBuf, ""); // 清空缓冲字符串
+            memset(numBuf,'\0',numBufSize); // 清空缓冲字符串
             for (size_t i = 0; i < numBufSize && isNum(*p); i++)
             {
                 numBuf[i] = *p;
@@ -135,12 +136,13 @@ Status calulator(char const *inputStr)
         {
             p++;
         }
-        else if (*p == '(')
+        else if (*p == ')')
         {
             while (popLStack(&opStack, &op) && op != '(')
             {
                 cal(&numStack, op);
             }
+            p++;
             // 这里需要检测 如果没有 （ 怎么办
         }
         else if (*p == '(')
@@ -148,6 +150,7 @@ Status calulator(char const *inputStr)
             // 我不清楚是是否需要保留这个
             // hasLeft =1;
             pushLStack(&opStack, *p);
+            p++;
         }
         else if (isOperator(*p))
         {

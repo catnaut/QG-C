@@ -16,9 +16,9 @@ Status isNum(char ch)
     return ((ch >= '0' && ch <= '9'));
 }
 
-int getProtiy(char ch)
+int getProtiy(ElemType o)
 {
-    switch (ch)
+    switch (o.op)
     {
     case '(':
         return 3;
@@ -43,7 +43,9 @@ int getProtiy(char ch)
 // 返回 SUCCESS
 Status checkProtiy(LinkStack *s, char ch)
 {
-    ElemType num1;
+    ElemType op1;
+    ElemType op;
+    op.op = ch;
     int status;
     if (s->count == 0)
     {
@@ -52,34 +54,34 @@ Status checkProtiy(LinkStack *s, char ch)
     else
     {
         // 此时理论不会有问题
-        getTopLStack(s, &num1);
-        return (getProtiy(num1) > getProtiy(ch));
+        getTopLStack(s, &op1);
+        return (getProtiy(op1) > getProtiy(op));
     }
 }
 
-Status cal(LinkStack *s, char op)
+Status cal(LinkStack *s,ElemType e)
 {
     ElemType num1, num2, num;
     // num1 倒数第 1个
     // 如果第一个成功才运行第二次
     if (popLStack(s, &num2) && popLStack(s, &num1))
     {
-        switch (op)
+        switch (e.op)
         {
         case '+':
-            num = num1 + num2;
+            num.num = num1.num + num2.num;
             pushLStack(s, num);
             break;
         case '-':
-            num = num1 - num2;
+            num.num = num1.num - num2.num;
             pushLStack(s, num);
             break;
         case '*':
-            num = num1 * num2;
+            num.num = num1.num * num2.num;
             pushLStack(s, num);
             break;
         case '/':
-            num = num1 / num2;
+            num.num = num1.num / num2.num;
             pushLStack(s, num);
             break;
         default:
@@ -103,10 +105,25 @@ Status printAnswer(LinkStack *s)
     {
         status = popLStack(s, &a);
         // destroyLStack(&s);
-        printf("%d\n", a);
+        printf("%f\n", a.num);
         return status;
     }
 }
+
+// 把浮点转为 ElemTpye
+ElemType float2Elem(float n){
+    ElemType tmp;
+    tmp.num = n;
+    return tmp;
+}
+
+// 把char转为 ElemTpye
+ElemType char2Elem(char c){
+    ElemType tmp;
+    tmp.op = c;
+    return tmp;
+}
+
 
 Status calulator(char const *inputStr)
 {
@@ -115,7 +132,7 @@ Status calulator(char const *inputStr)
     initLStack(&numStack);
     initLStack(&opStack);
     char numBuf[numBufSize];
-    char op;
+    ElemType op;
 
     while (*p != '\0')
     {
@@ -128,9 +145,8 @@ Status calulator(char const *inputStr)
                 p++;
             }
             // 此时在 numBuf 内应该有一个数字的字符串
-            int num = atoi(numBuf);
             // 转化为数字存放到数字栈
-            pushLStack(&numStack, num);
+            pushLStack(&numStack, float2Elem(atoi(numBuf)));
         }
         else if (*p == ' ')
         {
@@ -138,7 +154,7 @@ Status calulator(char const *inputStr)
         }
         else if (*p == ')')
         {
-            while (popLStack(&opStack, &op) && op != '(')
+            while ((popLStack(&opStack,&op)) && op.op != '(')
             {
                 cal(&numStack, op);
             }
@@ -149,14 +165,14 @@ Status calulator(char const *inputStr)
         {
             // 我不清楚是是否需要保留这个
             // hasLeft =1;
-            pushLStack(&opStack, *p);
+            pushLStack(&opStack, char2Elem(*p));
             p++;
         }
         else if (isOperator(*p))
         {
             if (checkProtiy(&opStack, *p))
             {
-                pushLStack(&opStack, *p);
+                pushLStack(&opStack, char2Elem(*p));
                 p++;
             }
             else
@@ -167,7 +183,7 @@ Status calulator(char const *inputStr)
                     cal(&numStack, op);
                 }
                 // 此时优先级大于进行压栈
-                pushLStack(&opStack, *p);
+                pushLStack(&opStack, char2Elem(*p));
                 p++;
             }
         }

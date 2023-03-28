@@ -222,18 +222,19 @@ Status ReverseList(LinkedList *L)
     }
 }
 
-Status SearchList(LinkedList L, ElemType e)
-{
-    if (L == NULL || L->next == NULL)
-        return ERROR;
-    LNode *p = L->next;
-    while (p != NULL)
-    {
-        if (p->data == e)
-        {
-            return SUCCESS;
-        }
-        p = p->next;
-    }
-    return ERROR;
-}
+// 无用代码,会影响运行
+// Status SearchList(LinkedList L, ElemType e)
+// {
+//     if (L == NULL || L->next == NULL)
+//         return ERROR;
+//     LNode *p = L->next;
+//     while (p != NULL)
+//     {
+//         if (p->data == e)
+//         {
+//             return SUCCESS;
+//         }
+//         p = p->next;
+//     }
+//     return ERROR;
+// }

@@ -28,7 +28,11 @@
 **************************************************************/
 
 // define element type
-typedef int ElemType;
+typedef  union ElemType
+{
+	char op;
+	float num;
+} ElemType;
 
 // define struct of linked list
 typedef struct LNode {

@@ -61,6 +61,7 @@ Status checkProtiy(LinkStack *s, char ch)
 
 Status cal(LinkStack *s, ElemType e)
 {
+    // 这个计算函数的错误判断我不太满意,有时间改下
     ElemType num1, num2, num;
     // num1 倒数第 1个
     // 如果第一个成功才运行第二次
@@ -84,16 +85,16 @@ Status cal(LinkStack *s, ElemType e)
             num.num = num1.num / num2.num;
             pushLStack(s, num);
             break;
-        default:
-            // error
-            assert(0);
+        case '(':
+            printf("unexpected '('");
+            exit(1);
             break;
         }
     }
     else
     {
-        // error
-        assert(0);
+        printf("illegal formula");
+        exit(1);
     }
 }
 
@@ -189,12 +190,28 @@ Status calulator(char const *inputStr)
             {
                 p++;
                 pushLStack(&numStack, getNum(&p));
+                if (*p!=')')
+                {
+                    printf("expect ')' at %d",p-inputStr+1);
+                    exit(1);
+                }
+                else{
+                    p++;
+                } 
             }
             else if (*p == '-')
             {
                 p++;
                 pushLStack(&numStack, setSign(getNum(&p)));
-            }
+                if (*p!=')')
+                {
+                    printf("expect ')' at %d",p-inputStr+1);
+                    exit(1);
+                }
+                else{
+                    p++;
+                }
+            }  
         }
 
         else if (isOperator(*p))
@@ -216,10 +233,11 @@ Status calulator(char const *inputStr)
                 p++;
             }
         }
-        
+
         else
         {
-            return ERROR;
+            printf("unkown operator '%c'",(char)*p);
+            exit(1);
         }
     }
     // 字符串遍历结束开始出栈

@@ -141,6 +141,10 @@ ElemType getNum(char** pptr){
     return float2Elem(r);
 }
 
+ElemType setSign(ElemType e){
+    e.num *= -1;
+    return e;
+}
 
 Status calulator(char const *inputStr)
 {
@@ -170,13 +174,24 @@ Status calulator(char const *inputStr)
             p++;
             // 这里需要检测 如果没有 （ 怎么办
         }
+
         else if (*p == '(')
         {
-            // 我不清楚是是否需要保留这个
-            // hasLeft =1;
             pushLStack(&opStack, char2Elem(*p));
             p++;
+            // 如果 后面有符号位 
+            if (*p=='+')
+            {
+                p++;
+                pushLStack(&numStack,getNum(&p));
+            }
+            else if(*p=='-')
+            {
+                p++;
+                pushLStack(&numStack,setSign(getNum(&p)));
+            }
         }
+
         else if (isOperator(*p))
         {
             if (checkProtiy(&opStack, *p))

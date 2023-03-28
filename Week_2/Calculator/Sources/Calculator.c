@@ -59,7 +59,7 @@ Status checkProtiy(LinkStack *s, char ch)
     }
 }
 
-Status cal(LinkStack *s,ElemType e)
+Status cal(LinkStack *s, ElemType e)
 {
     ElemType num1, num2, num;
     // num1 倒数第 1个
@@ -111,25 +111,27 @@ Status printAnswer(LinkStack *s)
 }
 
 // 把浮点转为 ElemTpye
-ElemType float2Elem(float n){
+ElemType float2Elem(float n)
+{
     ElemType tmp;
     tmp.num = n;
     return tmp;
 }
 
 // 把char转为 ElemTpye
-ElemType char2Elem(char c){
+ElemType char2Elem(char c)
+{
     ElemType tmp;
     tmp.op = c;
     return tmp;
 }
 
-
-ElemType getNum(char** pptr){
+ElemType getNum(char **pptr)
+{
     // char* p = *pptr;
     char numBuf[numBufSize];
     float r;
-    memset(numBuf,'\0',numBufSize); // 清空缓冲字符串
+    memset(numBuf, '\0', numBufSize); // 清空缓冲字符串
     for (size_t i = 0; i < numBufSize && isNum(**pptr); i++)
     {
         numBuf[i] = **pptr;
@@ -141,7 +143,8 @@ ElemType getNum(char** pptr){
     return float2Elem(r);
 }
 
-ElemType setSign(ElemType e){
+ElemType setSign(ElemType e)
+{
     e.num *= -1;
     return e;
 }
@@ -159,15 +162,17 @@ Status calulator(char const *inputStr)
     {
         if (isNum(*p))
         {
-            pushLStack(&numStack,getNum(&p)); // 将数字压入栈
+            pushLStack(&numStack, getNum(&p)); // 将数字压入栈
         }
+
         else if (*p == ' ')
         {
             p++;
         }
+
         else if (*p == ')')
         {
-            while ((popLStack(&opStack,&op)) && op.op != '(')
+            while ((popLStack(&opStack, &op)) && op.op != '(')
             {
                 cal(&numStack, op);
             }
@@ -179,16 +184,16 @@ Status calulator(char const *inputStr)
         {
             pushLStack(&opStack, char2Elem(*p));
             p++;
-            // 如果 后面有符号位 
-            if (*p=='+')
+            // 如果 后面有符号位
+            if (*p == '+')
             {
                 p++;
-                pushLStack(&numStack,getNum(&p));
+                pushLStack(&numStack, getNum(&p));
             }
-            else if(*p=='-')
+            else if (*p == '-')
             {
                 p++;
-                pushLStack(&numStack,setSign(getNum(&p)));
+                pushLStack(&numStack, setSign(getNum(&p)));
             }
         }
 
@@ -211,6 +216,7 @@ Status calulator(char const *inputStr)
                 p++;
             }
         }
+        
         else
         {
             return ERROR;

@@ -125,6 +125,23 @@ ElemType char2Elem(char c){
 }
 
 
+ElemType getNum(char** pptr){
+    // char* p = *pptr;
+    char numBuf[numBufSize];
+    float r;
+    memset(numBuf,'\0',numBufSize); // 清空缓冲字符串
+    for (size_t i = 0; i < numBufSize && isNum(**pptr); i++)
+    {
+        numBuf[i] = **pptr;
+        (*pptr)++;
+    }
+    // 此时在 numBuf 内应该有一个数字的字符串
+    r = atof(numBuf);
+    // 转化为 ElemType 返回
+    return float2Elem(r);
+}
+
+
 Status calulator(char const *inputStr)
 {
     char *p = inputStr;
@@ -138,15 +155,7 @@ Status calulator(char const *inputStr)
     {
         if (isNum(*p))
         {
-            memset(numBuf,'\0',numBufSize); // 清空缓冲字符串
-            for (size_t i = 0; i < numBufSize && isNum(*p); i++)
-            {
-                numBuf[i] = *p;
-                p++;
-            }
-            // 此时在 numBuf 内应该有一个数字的字符串
-            // 转化为数字存放到数字栈
-            pushLStack(&numStack, float2Elem(atoi(numBuf)));
+            pushLStack(&numStack,getNum(&p)); // 将数字压入栈
         }
         else if (*p == ' ')
         {
